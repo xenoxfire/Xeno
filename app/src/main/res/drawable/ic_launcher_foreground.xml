@@ -1,0 +1,31 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:scaleX="0.55"
+        android:scaleY="0.55"
+        android:translateX="24.3"
+        android:translateY="24.3">
+        <!-- Outer Glowing Ring -->
+        <path
+            android:fillColor="#00000000"
+            android:pathData="M54,12 A42,42 0 1,1 53.9,12"
+            android:strokeColor="#00F2FE"
+            android:strokeLineCap="round"
+            android:strokeWidth="6" />
+        <!-- Clock Hands / Shift Indicator -->
+        <path
+            android:fillColor="#00000000"
+            android:pathData="M54,26 L54,54 L72,54"
+            android:strokeColor="#9B51E0"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round"
+            android:strokeWidth="6" />
+        <!-- Center Dot -->
+        <path
+            android:fillColor="#00F2FE"
+            android:pathData="M54,54m-4,0a4,4 0,1,1 8,0a4,4 0,1,1 -8,0" />
+    </group>
+</vector>

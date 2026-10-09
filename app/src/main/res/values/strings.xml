@@ -1,0 +1,98 @@
+<resources>
+    <string name="app_name">Xeno</string>
+    <string name="app_tagline">Floating Time Shift &amp; Auto-Paste Overlay</string>
+    <string name="status_running">Active</string>
+    <string name="status_stopped">Inactive</string>
+    <string name="status_service_running_desc">Floating bubble is visible on your screen</string>
+    <string name="status_service_stopped_desc">Grant permissions below and tap START</string>
+
+    <!-- Action Buttons -->
+    <string name="btn_start_service">START XENO</string>
+    <string name="btn_stop_service">STOP XENO</string>
+    <string name="btn_restore_auto_time">Restore Auto Time</string>
+    <string name="btn_restore_auto_time_desc">Re-enables network synchronization (auto_time = 1)</string>
+
+    <!-- Saved Text Card -->
+    <string name="saved_text_title">Saved Text for Auto-Paste</string>
+    <string name="saved_text_subtitle">This text will be instantly typed into any active input when you tap the Paste bubble.</string>
+    <string name="saved_text_placeholder">Enter the text you want to auto-paste...</string>
+    <string name="saved_text_save_btn">Save Text</string>
+    <string name="saved_text_saved_toast">Text saved successfully</string>
+    <string name="saved_text_char_count">Characters: %1$d</string>
+
+    <!-- Permissions Card -->
+    <string name="permissions_title">Required Permissions</string>
+    <string name="permissions_subtitle">All items are required for the floating bubble and instant time shift.</string>
+    <string name="perm_granted">Granted</string>
+    <string name="perm_not_granted">Not Granted</string>
+    <string name="perm_grant_btn">Grant</string>
+    <string name="perm_check_btn">Check</string>
+
+    <string name="perm_overlay_title">Display Over Other Apps</string>
+    <string name="perm_overlay_desc">Allows Xeno to show floating bubbles over YouTube, games, and other apps.</string>
+
+    <string name="perm_accessibility_title">Accessibility Service</string>
+    <string name="perm_accessibility_desc">Used solely to paste saved text into the focused field on bubble tap. No screen monitoring or logging.</string>
+
+    <string name="perm_notifications_title">Foreground Notification</string>
+    <string name="perm_notifications_desc">Keeps the overlay service alive and provides a 1-tap Stop &amp; Restore notification action.</string>
+
+    <string name="perm_battery_title">Ignore Battery Optimization</string>
+    <string name="perm_battery_desc">Prevents system power managers from killing Xeno in the background.</string>
+
+    <string name="perm_shizuku_title">Shizuku (System Time Control)</string>
+    <string name="perm_shizuku_desc">Required to change system clock without root privileges using ADB shell permissions.</string>
+    <string name="shizuku_status_running">Shizuku service is running and authorized</string>
+    <string name="shizuku_status_not_running">Shizuku service is not running. Please start it.</string>
+    <string name="shizuku_status_need_perm">Shizuku is running, but permission is required.</string>
+    <string name="shizuku_open_app">Open Shizuku</string>
+    <string name="shizuku_req_perm">Authorize Xeno</string>
+
+    <!-- OEM Guidance -->
+    <string name="oem_guidance_title">Xiaomi / HyperOS / MIUI Guidance</string>
+    <string name="oem_guidance_step1">• Enable Autostart in App info</string>
+    <string name="oem_guidance_step2">• Other permissions: Allow "Display pop-up windows while running in the background"</string>
+    <string name="oem_guidance_step3">• Battery saver: Choose "No restrictions"</string>
+
+    <!-- Settings Card -->
+    <string name="settings_title">Overlay Settings</string>
+    <string name="settings_size_label">Bubble Size: %1$ddp</string>
+    <string name="settings_opacity_label">Bubble Opacity: %1$d%%</string>
+    <string name="settings_theme_title">UI Theme Style</string>
+    <string name="theme_glass">Glass</string>
+    <string name="theme_neon">Neon Dark</string>
+    <string name="theme_minimal">Minimal Mono</string>
+    <string name="theme_aurora">Aurora</string>
+
+    <string name="setting_haptic_title">Haptic Feedback</string>
+    <string name="setting_haptic_desc">Subtle vibration tick when tapping bubbles</string>
+
+    <string name="setting_collapse_title">Collapse After Paste</string>
+    <string name="setting_collapse_desc">Automatically collapse back to main bubble after pasting</string>
+
+    <string name="setting_snap_title">Snap to Edge</string>
+    <string name="setting_snap_desc">Magnetically snap bubble to the closest screen edge when dragged</string>
+
+    <!-- Service & Accessibility Strings -->
+    <string name="accessibility_service_label">Xeno Auto-Paste Service</string>
+    <string name="accessibility_service_description">Xeno uses accessibility solely to paste your saved text into the currently active input field when you tap the floating Paste bubble. It never reads, logs, or transmits screen content.</string>
+    <string name="notification_channel_name">Xeno Overlay Service</string>
+    <string name="notification_channel_desc">Active persistent notification for Xeno floating bubble</string>
+    <string name="notification_title">Xeno is Active</string>
+    <string name="notification_content">Floating bubble is on-screen. Tap button below to stop.</string>
+    <string name="notification_action_stop">Stop &amp; Restore Auto Time</string>
+
+    <!-- Toast & Feedback Messages -->
+    <string name="toast_tap_input_first">Tap an input field first</string>
+    <string name="toast_text_pasted">Text pasted</string>
+    <string name="toast_time_shifted">Time shifted: %1$+d min</string>
+    <string name="toast_auto_time_restored">Automatic network time restored</string>
+    <string name="toast_auto_time_failed">Failed to restore auto time via Shizuku</string>
+    <string name="toast_shizuku_not_ready">Shizuku is not running or authorized!</string>
+    <string name="toast_permission_missing">Please grant all required permissions first</string>
+
+    <!-- Overlay Custom Pad Strings -->
+    <string name="custom_minutes_title">Custom Minutes</string>
+    <string name="custom_minutes_apply">Set</string>
+    <string name="custom_minutes_clear">C</string>
+</resources>
