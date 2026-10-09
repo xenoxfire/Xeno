@@ -169,6 +169,29 @@ object TimeController {
         executeShellCommand("settings put global auto_time 1")
     }
 
+    fun isReady(): Boolean = isShizukuAvailable() && hasShizukuPermission()
+
+    suspend fun pasteViaShizuku(): Boolean = withContext(Dispatchers.IO) {
+        if (!isReady()) return@withContext false
+        val service = timeService
+        if (service != null) {
+            try {
+                val ok = service.triggerPaste()
+                if (ok) return@withContext true
+            } catch (t: Throwable) {
+                Log.w(TAG, "UserService triggerPaste IPC failed: ${t.message}")
+            }
+        }
+        // Fallback: direct shell execution of KEYCODE_PASTE (279)
+        val ok = executeShellCommand("input keyevent 279")
+        if (!ok) {
+            // Alternative: keycombination for Ctrl+V
+            executeShellCommand("input keycombination 113 50 || input keyevent 279")
+        } else {
+            true
+        }
+    }
+
     private fun executeShellCommand(cmd: String): Boolean {
         if (!isShizukuAvailable() || !hasShizukuPermission()) return false
         val method = newProcessMethod ?: return false

@@ -21,6 +21,7 @@ import android.widget.Toast
 import com.example.R
 import com.example.data.SettingsRepository
 import com.example.model.SettingsModel
+import com.example.service.PasteResult
 import com.example.service.XenoAccessibilityService
 import com.example.time.TimeController
 import kotlinx.coroutines.CoroutineScope
@@ -142,7 +143,6 @@ class BubbleOverlayManager(
                 @Suppress("DEPRECATION")
                 WindowManager.LayoutParams.TYPE_PHONE
             }
-            // Retain FLAG_NOT_FOCUSABLE and add FLAG_NOT_TOUCH_MODAL
             flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
                     WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
@@ -172,7 +172,7 @@ class BubbleOverlayManager(
     private fun buildReusableViews() {
         val root = rootLayout ?: return
         val bubbleSizePx = dpToPx(currentSettings.bubbleSizeDp.toFloat())
-        val spacingPx = dpToPx(16f)
+        val spacingPx = dpToPx(14f)
 
         // 1. Main Bubble
         mainBubbleView = BubbleItemView(context).apply {
@@ -185,7 +185,7 @@ class BubbleOverlayManager(
         setupDraggableMainBubble(mainBubbleView)
         root.addView(mainBubbleView, FrameLayout.LayoutParams(bubbleSizePx, bubbleSizePx))
 
-        // 2. Expanded Container: [Time] [Paste] [—]
+        // 2. Expanded Container (Vertical / লম্বালম্বি): [Time] -> [Paste] -> [—]
         expandedContainer = FrameLayout(context).apply {
             clipChildren = false
             clipToPadding = false
@@ -217,10 +217,10 @@ class BubbleOverlayManager(
                 true
             }
         }
-        populateHorizontalContainer(expandedContainer, listOf(timeBubble, pasteBubble, collapseBubble), bubbleSizePx, spacingPx)
+        populateVerticalContainer(expandedContainer, listOf(timeBubble, pasteBubble, collapseBubble), bubbleSizePx, spacingPx)
         root.addView(expandedContainer)
 
-        // 3. Time Signs Container: [Back] [+] [−]
+        // 3. Time Signs Container (Vertical / লম্বালম্বি): [Back] -> [+] -> [−]
         timeSignsContainer = FrameLayout(context).apply {
             clipChildren = false
             clipToPadding = false
@@ -251,10 +251,10 @@ class BubbleOverlayManager(
                 switchState(OverlayState.TIME_MINUTES)
             }
         }
-        populateHorizontalContainer(timeSignsContainer, listOf(anchorTime, plusBubble, minusBubble), bubbleSizePx, spacingPx)
+        populateVerticalContainer(timeSignsContainer, listOf(anchorTime, plusBubble, minusBubble), bubbleSizePx, spacingPx)
         root.addView(timeSignsContainer)
 
-        // 4. Time Minutes Container: [Back] [1m] [2m] [6m] [...]
+        // 4. Time Minutes Container (Vertical / লম্বালম্বি): [Back] -> [1m] -> [2m] -> [6m] -> [...]
         timeMinutesContainer = FrameLayout(context).apply {
             clipChildren = false
             clipToPadding = false
@@ -300,7 +300,7 @@ class BubbleOverlayManager(
                 switchState(OverlayState.CUSTOM_KEYPAD)
             }
         }
-        populateHorizontalContainer(timeMinutesContainer, listOf(anchorBack, min1Bubble, min2Bubble, min6Bubble, customBtn), bubbleSizePx, spacingPx)
+        populateVerticalContainer(timeMinutesContainer, listOf(anchorBack, min1Bubble, min2Bubble, min6Bubble, customBtn), bubbleSizePx, spacingPx)
         root.addView(timeMinutesContainer)
 
         // 5. Custom Keypad
@@ -339,16 +339,17 @@ class BubbleOverlayManager(
         root.addView(keypadView, FrameLayout.LayoutParams(keypadWidth, keypadHeight))
     }
 
-    private fun populateHorizontalContainer(container: FrameLayout, views: List<View>, sizePx: Int, spacingPx: Int) {
-        var startX = dpToPx(12f)
-        val startY = dpToPx(12f)
+    private fun populateVerticalContainer(container: FrameLayout, views: List<View>, sizePx: Int, spacingPx: Int) {
+        container.removeAllViews()
+        val startX = dpToPx(12f)
+        var startY = dpToPx(12f)
         views.forEach { v ->
             val lp = FrameLayout.LayoutParams(sizePx, sizePx).apply {
                 leftMargin = startX
                 topMargin = startY
             }
             container.addView(v, lp)
-            startX += sizePx + spacingPx
+            startY += sizePx + spacingPx
         }
     }
 
@@ -368,7 +369,8 @@ class BubbleOverlayManager(
     private fun switchState(newState: OverlayState) {
         currentState = newState
         val bubbleSizePx = dpToPx(currentSettings.bubbleSizeDp.toFloat())
-        val spacingPx = dpToPx(16f)
+        val spacingPx = dpToPx(14f)
+        val verticalWidth = bubbleSizePx + dpToPx(24f)
 
         mainBubbleView.visibility = View.GONE
         expandedContainer.visibility = View.GONE
@@ -385,23 +387,20 @@ class BubbleOverlayManager(
 
             OverlayState.EXPANDED -> {
                 expandedContainer.visibility = View.VISIBLE
-                val w = (bubbleSizePx * 3) + (spacingPx * 2) + dpToPx(24f)
-                val h = bubbleSizePx + dpToPx(24f)
-                openMenuInPlace(w, h)
+                val h = (bubbleSizePx * 3) + (spacingPx * 2) + dpToPx(24f)
+                openMenuInPlace(verticalWidth, h)
             }
 
             OverlayState.TIME_SIGNS -> {
                 timeSignsContainer.visibility = View.VISIBLE
-                val w = (bubbleSizePx * 3) + (spacingPx * 2) + dpToPx(24f)
-                val h = bubbleSizePx + dpToPx(24f)
-                openMenuInPlace(w, h)
+                val h = (bubbleSizePx * 3) + (spacingPx * 2) + dpToPx(24f)
+                openMenuInPlace(verticalWidth, h)
             }
 
             OverlayState.TIME_MINUTES -> {
                 timeMinutesContainer.visibility = View.VISIBLE
-                val w = (bubbleSizePx * 5) + (spacingPx * 4) + dpToPx(24f)
-                val h = bubbleSizePx + dpToPx(24f)
-                openMenuInPlace(w, h)
+                val h = (bubbleSizePx * 5) + (spacingPx * 4) + dpToPx(24f)
+                openMenuInPlace(verticalWidth, h)
             }
 
             OverlayState.CUSTOM_KEYPAD -> {
@@ -414,7 +413,7 @@ class BubbleOverlayManager(
     }
 
     private fun openMenuInPlace(menuWidth: Int, menuHeight: Int) {
-        // Shift window only if it would go off-screen
+        updateScreenDimensions()
         val safeX = bubblePosX.coerceIn(10, (screenWidth - menuWidth - 10).coerceAtLeast(10))
         val safeY = bubblePosY.coerceIn(50, (screenHeight - menuHeight - 50).coerceAtLeast(50))
         updateWindowSize(menuWidth, menuHeight, safeX, safeY)
@@ -526,19 +525,56 @@ class BubbleOverlayManager(
         coroutineScope.launch {
             val savedText = currentSettings.savedText
             val service = XenoAccessibilityService.instance
+            val pasteResult: PasteResult
+
             if (service != null) {
-                val pasted = service.pasteText(savedText)
-                if (pasted) {
+                pasteResult = service.pasteText(savedText)
+            } else {
+                copyToClipboard(savedText)
+                if (TimeController.isReady()) {
+                    val shizukuOk = TimeController.pasteViaShizuku()
+                    pasteResult = if (shizukuOk) PasteResult.PASTED_DIRECTLY else PasteResult.COPIED_TO_CLIPBOARD
+                } else {
+                    pasteResult = PasteResult.COPIED_TO_CLIPBOARD
+                }
+            }
+
+            when (pasteResult) {
+                PasteResult.PASTED_DIRECTLY -> {
+                    Toast.makeText(context, context.getString(R.string.toast_text_pasted), Toast.LENGTH_SHORT).show()
                     if (currentSettings.collapseAfterPaste) {
                         switchState(OverlayState.MAIN)
                     }
-                } else {
+                }
+                PasteResult.COPIED_TO_CLIPBOARD -> {
+                    if (TimeController.isReady()) {
+                        val shizukuOk = TimeController.pasteViaShizuku()
+                        if (shizukuOk) {
+                            Toast.makeText(context, context.getString(R.string.toast_text_pasted), Toast.LENGTH_SHORT).show()
+                            if (currentSettings.collapseAfterPaste) {
+                                switchState(OverlayState.MAIN)
+                            }
+                            return@launch
+                        }
+                    }
+                    Toast.makeText(context, context.getString(R.string.toast_copied_to_clipboard), Toast.LENGTH_SHORT).show()
+                    if (currentSettings.collapseAfterPaste) {
+                        switchState(OverlayState.MAIN)
+                    }
+                }
+                PasteResult.FAILED -> {
                     Toast.makeText(context, context.getString(R.string.toast_tap_input_first), Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                Toast.makeText(context, context.getString(R.string.toast_tap_input_first), Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun copyToClipboard(text: String) {
+        try {
+            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+            val clip = android.content.ClipData.newPlainText("Xeno Text", text)
+            clipboard.setPrimaryClip(clip)
+        } catch (_: Exception) {}
     }
 
     private fun triggerHaptic() {

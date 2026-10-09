@@ -50,6 +50,16 @@ class XenoTimeUserService : IXenoTimeService.Stub {
         }
     }
 
+    override fun triggerPaste(): Boolean {
+        return try {
+            val process = Runtime.getRuntime().exec(arrayOf("input", "keyevent", "279"))
+            process.waitFor() == 0
+        } catch (t: Throwable) {
+            Log.e(TAG, "triggerPaste input keyevent failed: ${t.message}")
+            false
+        }
+    }
+
     companion object {
         private const val TAG = "XenoTimeUserService"
     }

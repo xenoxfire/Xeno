@@ -5,4 +5,5 @@ interface IXenoTimeService {
     boolean shiftTime(long deltaMs);
     boolean setTime(long epochMs);
     boolean setAutoTime(int enabled);
+    boolean triggerPaste();
 }

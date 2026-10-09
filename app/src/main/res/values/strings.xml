@@ -84,7 +84,8 @@
 
     <!-- Toast & Feedback Messages -->
     <string name="toast_tap_input_first">Tap an input field first</string>
-    <string name="toast_text_pasted">Text pasted</string>
+    <string name="toast_text_pasted">Text pasted ✓</string>
+    <string name="toast_copied_to_clipboard">Copied to clipboard! Tap box to paste</string>
     <string name="toast_time_shifted">Time shifted: %1$+d min</string>
     <string name="toast_auto_time_restored">Automatic network time restored</string>
     <string name="toast_auto_time_failed">Failed to restore auto time via Shizuku</string>
